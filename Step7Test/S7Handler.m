@@ -7,92 +7,98 @@
 //
 
 #import "S7Handler.h"
+#import "S7Errors.h"
 
 @implementation S7Handler
 
 S7Object client;
 
--(int) connectTo: (NSString*) ipAddress rack: (int) rack slot: (int) slot {
+-(void) connectTo: (NSString*) ipAddress rack: (int) rack slot: (int) slot withError: (NSError **) error {
     
     client = Cli_Create();
     const char *cIpAddress = [ipAddress cStringUsingEncoding:NSASCIIStringEncoding];
     int result = Cli_ConnectTo(client, cIpAddress, rack, slot);
-    if (result == 0)
+    
+    if (result != 0)
     {
-        NSLog(@"Successfully connected to %@", ipAddress);
+        *error = [[NSError alloc] initWithDomain:Step7TestErrorDomain
+                                            code:result
+                                        userInfo:NULL];
     }
-    else {
-        NSLog(@"Error when connecting. %i", result);
-    }
-    return result;
 }
 
--(int) listBlocksOfType: (int) blockType {
+-(NSArray*) listBlocksOfType: (int) blockType withError: (NSError **) error {
     int result;
-    
     TS7BlocksOfType blocksOfType;
     int count = 0x2000; //Max block count
     result = Cli_ListBlocksOfType(client, blockType, &blocksOfType, &count);
     
-    if (result == 0) {
-        for (int i = 0; i < count; i++) {
-            NSLog(@"%i", blocksOfType[i]);
-        }
+    if (result != 0) {
+        *error = [[NSError alloc] initWithDomain:Step7TestErrorDomain
+                                            code:result
+                                        userInfo:NULL];
+        return nil;
     }
     else {
-        NSLog(@"Failed to get blocks, error: %i", result);
+        NSMutableArray *a = [[NSMutableArray alloc] initWithCapacity:count];
+        for (int i = 0; i < count; i++) {
+            NSNumber *n = [[NSNumber alloc] initWithUnsignedInt:blocksOfType[i]];
+            [a addObject:n];
+        }
+        return a;
     }
     
-    return result;
 }
 
--(int) disconnect {
+-(void) disconnect {
     int result;
     result = Cli_Disconnect(client);
-    return result;
 }
 
--(int) readInputsStartingAtByte: (int) start withLength: (int) length {
+-(NSArray*) readInputsStartingAtByte: (int) start withLength: (int) length withError: (NSError **) error {
     int result;
-    //result = Cli_EBRead(client, start, length, void)
-    return result;
+    byte bytes[0x2000];
+    result = Cli_EBRead(client, start, length, &bytes);
+    
+    if (result != 0) {
+        *error = [[NSError alloc] initWithDomain:Step7TestErrorDomain
+                                            code:result
+                                        userInfo:NULL];
+        return nil;
+    }
+    else {
+        NSMutableArray *a = [[NSMutableArray alloc] initWithCapacity:length];
+        for (int i = 0; i < length; i++) {
+            NSNumber *n = [[NSNumber alloc] initWithUnsignedChar:bytes[i]];
+            [a addObject:n];
+        }
+        return a;
+    }
+
 }
 
--(int) listBlockCounts {
+-(NSDictionary*) listBlockCountsWithError: (NSError **) error {
     
     TS7BlocksList blockList;
     int result = Cli_ListBlocks(client, &blockList);
     
-    if (result == 0) {
-        NSLog(@"OB Count: %i", blockList.OBCount);
-        NSLog(@"DB Count: %i", blockList.DBCount);
-        NSLog(@"FC Count: %i", blockList.FCCount);
-        NSLog(@"FB Count: %i", blockList.FBCount);
-        NSLog(@"SFC Count: %i", blockList.SFCCount);
-        NSLog(@"SFB Count: %i", blockList.SFBCount);
-        NSLog(@"SDB Count: %i", blockList.SDBCount);
+    if (result != 0) {
+        *error = [[NSError alloc] initWithDomain:Step7TestErrorDomain
+                                            code:result
+                                        userInfo:NULL];
+        return nil;
     }
     else {
-        NSLog(@"Failed to list blocks, error: %i", result);
-    }
-    if (blockList.OBCount > 0)  {
-        NSLog(@"OB");
-        [self listBlocksOfType: Block_OB];
-    }
-    if (blockList.DBCount > 0) {
-        NSLog(@"DB");
-        [self listBlocksOfType: Block_DB];
-    }
-    if (blockList.FCCount > 0) {
-        NSLog(@"FC");
-        [self listBlocksOfType: Block_FC];
-    }
-    if (blockList.FBCount > 0) {
-        NSLog(@"FB");
-        [self listBlocksOfType: Block_FB];
+        NSMutableDictionary *d = [[NSMutableDictionary alloc] initWithCapacity:6];
+        [d setValue:[[NSNumber alloc] initWithInt:blockList.OBCount] forUndefinedKey:@"OB"];
+        [d setValue:[[NSNumber alloc] initWithInt:blockList.DBCount] forUndefinedKey:@"DB"];
+        [d setValue:[[NSNumber alloc] initWithInt:blockList.FCCount] forUndefinedKey:@"FC"];
+        [d setValue:[[NSNumber alloc] initWithInt:blockList.FBCount] forUndefinedKey:@"FB"];
+        [d setValue:[[NSNumber alloc] initWithInt:blockList.SFCCount] forUndefinedKey:@"SFC"];
+        [d setValue:[[NSNumber alloc] initWithInt:blockList.SFBCount] forUndefinedKey:@"SFB"];
+        return d;
     }
     
-    return result;
 }
 
 @end

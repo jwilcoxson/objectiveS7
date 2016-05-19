@@ -11,9 +11,16 @@
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         S7Handler *s7 = [[S7Handler alloc] init];
-        [s7 connectTo:@"10.0.0.16" rack:0 slot:2];
-        [s7 listBlockCounts];
-        [s7 disconnect];
+        NSError *e;
+        [s7 connectTo:@"10.0.0.16" rack:0 slot:2 withError: &e];
+        if (e == nil) {
+            [s7 listBlockCountsWithError: &e];
+            [s7 disconnect];
+        }
+        else {
+            NSLog(@"Couldn't connect to server");
+        }
+        
     }
     return 0;
 }

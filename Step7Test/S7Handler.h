@@ -14,11 +14,11 @@
 
 @interface S7Handler : NSObject
 
--(int) connectTo: (NSString*) ipAddress rack: (int) rack slot: (int) slot;
--(int) disconnect;
--(int) listBlocksOfType: (int) blockType;
--(int) listBlockCounts;
--(int) readInputsStartingAtByte: (int) start withLength: (int) length;
+-(void) connectTo: (NSString*) ipAddress rack: (int) rack slot: (int) slot withError: (NSError **) error;
+-(void) disconnect;
+-(NSArray*) listBlocksOfType: (int) blockType withError: (NSError **) error;
+-(NSDictionary*) listBlockCountsWithError: (NSError **) error;
+-(NSArray*) readInputsStartingAtByte: (int) start withLength: (int) length withError: (NSError **) error;
 
 @end
 
