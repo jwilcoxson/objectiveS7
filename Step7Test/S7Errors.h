@@ -9,6 +9,6 @@
 #ifndef S7Errors_h
 #define S7Errors_h
 
-NSString *Step7TestErrorDomain = @"org.wilcoxson.step7test.ErrorDomain";
+extern NSString *Step7TestErrorDomain;
 
 #endif /* S7Errors_h */
