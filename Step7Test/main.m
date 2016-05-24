@@ -118,38 +118,66 @@ int main(int argc, const char * argv[]) {
                 NSLog(@"Error listing block counts");
             }
             
-            NSArray *inputs = [s7 readInputsStartingAtByte:0 withByteLength:2 withError:&e];
+            NSData *inputs = [s7 readInputsStartingAtByte:0 withByteLength:10 withError:&e];
             
             if (inputs != nil) {
                 NSLog(@"Read inputs successful");
-                for (int i = 0; i < [inputs count]; i++) {
-                    NSLog(@"IB%d: %d", i, [(S7Byte*)inputs[i] getValue]);
+                NSLog(@"%@", inputs);
+                for (int i = 0; i < [inputs length]; i++) {
+                    NSLog(@"IB%d = %d", i, [S7Data getByte:i inData:inputs]);
                     for (int j = 0; j < 8; j++) {
-                        NSLog(@"I%d.%d: %d", i, j, [(S7Byte*)inputs[i] getBit:j]);
+                        NSLog(@"I%d.%d = %d", i, j, [S7Data getBit:j fromByte:i inData:inputs]);
                     }
                 }
-                
             }
             else {
                 NSLog(@"Error reading inputs");
             }
             
-            NSArray *outputs = [s7 readOutputsStartingAtByte:0 withByteLength:2 withError:&e];
+            NSData *outputs = [s7 readOutputsStartingAtByte:0 withByteLength:10 withError:&e];
             
             if (outputs != nil) {
                 NSLog(@"Read outputs successful");
-                for (int i = 0; i < [outputs count]; i++) {
-                    NSLog(@"QB%d: %d", i, [(S7Byte*)outputs[i] getValue]);
-                    for (int j = 0; j < 8; j++) {
-                        NSLog(@"Q%d.%d: %d", i, j, [(S7Byte*)outputs[i] getBit:j]);
-                    }
-                }
-
+                NSLog(@"%@", outputs);
             }
             else {
                 NSLog(@"Error reading outputs");
             }
             
+            NSString *rs = [s7 getPlcModeWithError:&e];
+            
+            if (e == nil)
+            {
+                NSLog(@"PLC Mode: %@", rs);
+            }
+            else {
+                NSLog(@"Error getting PLC status");
+            }
+            
+            NSDictionary *dc = [s7 getPlcInfoWithError:&e];
+            
+            if (e == nil) {
+                NSLog(@"%@", dc);
+            }
+            else {
+                NSLog(@"Error getting PLC Info");
+            }
+            
+            NSDictionary *oc = [s7 getPlcOrderCodeWithError:&e];
+            
+            if (e == nil) {
+                NSLog(@"%@", oc);
+            }
+            else {
+                NSLog(@"Error getting PLC Order Code");
+            }
+
+            [s7 addReadEntry:[[S7ReadEntry alloc] initIBReadEntryAtByte: 0]];
+            [s7 addReadEntry:[[S7ReadEntry alloc] initIBReadEntryAtByte: 3]];
+            [s7 addReadEntry:[[S7ReadEntry alloc] initIBReadEntryAtByte: 7]];
+            
+            [s7 calculateRead];
+            [s7 executeRead];
             
             [s7 disconnectWithError: &e];
             

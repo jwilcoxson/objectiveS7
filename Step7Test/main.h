@@ -11,5 +11,6 @@
 
 #import <Foundation/Foundation.h>
 #import "S7Handler.h"
+#import "S7Data.h"
 
 #endif /* main_h */
