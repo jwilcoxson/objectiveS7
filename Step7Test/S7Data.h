@@ -10,9 +10,12 @@
 
 @interface S7Data : NSObject
 
-+(BOOL) getBit: (UInt8) bitNumber fromByte: (UInt16) byteNumber inData: (NSData*) data;
-+(NSData*) setBit: (UInt8) bitNumber fromByte: (UInt16) byteNumber inData: (NSData*) data value: (BOOL) value;
-+(UInt8) getByte: (UInt16) byteNumber inData: (NSData*) data;
-+(NSData*) setByte: (UInt16) byteNumber inData: (NSData*) data value: (UInt8) value;
++ (BOOL)getBit:(UInt8)bitNumber fromByte:(UInt16)byteNumber inData:(NSData *)data;
++ (NSData *)setBit:(UInt8)bitNumber
+          fromByte:(UInt16)byteNumber
+            inData:(NSData *)data
+             value:(BOOL)value;
++ (UInt8)getByte:(UInt16)byteNumber inData:(NSData *)data;
++ (NSData *)setByte:(UInt16)byteNumber inData:(NSData *)data value:(UInt8)value;
 
 @end

@@ -12,7 +12,7 @@
 
 @synthesize readArea, dbNumber, byteNumber;
 
--(id)initIBReadEntryAtByte:(int)byte {
+- (id)initIBReadEntryAtByte:(int)byte {
     self = [super init];
     if(self) {
         readArea = @"IB";
@@ -24,7 +24,7 @@
     }
 }
 
--(id)initQBReadyEntryAtByte:(int)byte {
+- (id)initQBReadyEntryAtByte:(int)byte {
     self = [super init];
     if(self) {
         readArea = @"QB";
@@ -36,7 +36,7 @@
     }
 }
 
--(id)initMBReadEntryAtByte:(int)byte {
+- (id)initMBReadEntryAtByte:(int)byte {
     self = [super init];
     if(self) {
         readArea = @"MB";
@@ -48,7 +48,7 @@
     }
 }
 
--(id)initDBReadEntry:(int)dataBlock atByte:(int)byte {
+- (id)initDBReadEntry:(int)dataBlock atByte:(int)byte {
     self = [super init];
     if(self) {
         readArea = @"DB";
@@ -61,34 +61,31 @@
     }
 }
 
--(NSComparisonResult)compare:(S7ReadEntry *)otherEntry {
-    if(self.readArea < otherEntry.readArea)
-    {
+- (NSComparisonResult)compare:(S7ReadEntry *)otherEntry {
+    if(self.readArea < otherEntry.readArea) {
         return NSOrderedAscending;
     }
-    if(self.readArea > otherEntry.readArea)
-    {
+    
+    if(self.readArea > otherEntry.readArea) {
         return NSOrderedDescending;
     }
     
-    if(self.readArea == otherEntry.readArea)
-    {
-        if(self.dbNumber < otherEntry.dbNumber)
-        {
+    if(self.readArea == otherEntry.readArea) {
+        
+        if(self.dbNumber < otherEntry.dbNumber) {
             return NSOrderedAscending;
         }
-        if(self.dbNumber > otherEntry.dbNumber)
-        {
+        
+        if(self.dbNumber > otherEntry.dbNumber) {
             return NSOrderedDescending;
         }
-        if(self.dbNumber == otherEntry.dbNumber)
-        {
-            if(self.byteNumber < otherEntry.byteNumber)
-            {
+        
+        if(self.dbNumber == otherEntry.dbNumber) {
+            if(self.byteNumber < otherEntry.byteNumber) {
                 return NSOrderedAscending;
             }
-            if(self.byteNumber > otherEntry.byteNumber)
-            {
+            
+            if(self.byteNumber > otherEntry.byteNumber) {
                 return NSOrderedDescending;
             }
         }

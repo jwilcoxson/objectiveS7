@@ -14,9 +14,10 @@
 @property int dbNumber;
 @property int byteNumber;
 
--(id)initDBReadEntry: (int) dbNumber atByte: (int) byteNumber;
--(id)initIBReadEntryAtByte: (int) byteNumber;
--(id)initQBReadyEntryAtByte: (int) byteNumber;
--(id)initMBReadEntryAtByte: (int) byteNumber;
--(NSComparisonResult)compare:(S7ReadEntry *)otherEntry;
+- (id)initDBReadEntry:(int)dbNumber atByte:(int)byteNumber;
+- (id)initIBReadEntryAtByte:(int)byteNumber;
+- (id)initQBReadyEntryAtByte:(int)byteNumber;
+- (id)initMBReadEntryAtByte:(int)byteNumber;
+- (NSComparisonResult)compare:(S7ReadEntry *)otherEntry;
+
 @end

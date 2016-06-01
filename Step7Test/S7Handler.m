@@ -16,7 +16,7 @@
     NSMutableArray *readPlanObjects;
 }
 
--(id)init {
+- (id)init {
     self = [super init];
     if(self) {
         readEntries = [[NSMutableArray alloc] init];
@@ -27,21 +27,23 @@
     }
 }
 
--(void) connectTo: (NSString*) ipAddress rack: (int) rack slot: (int) slot withError: (NSError **) error {
+- (void)connectTo:(NSString *)ipAddress
+             rack:(int)rack
+             slot:(int)slot
+        withError:(NSError * __autoreleasing *)error {
     *error = nil;
     client = Cli_Create();
     const char *cIpAddress = [ipAddress cStringUsingEncoding:NSASCIIStringEncoding];
     int result = Cli_ConnectTo(client, cIpAddress, rack, slot);
     
-    if (result != 0)
-    {
+    if (result != 0) {
         *error = [[NSError alloc] initWithDomain:Step7TestErrorDomain
                                             code:result
                                         userInfo:NULL];
     }
 }
 
--(NSArray*) listBlocksOfType: (byte) blockType withError: (NSError **) error {
+- (NSArray *)listBlocksOfType:(byte)blockType withError:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     TS7BlocksOfType blocksOfType;
@@ -60,8 +62,9 @@
             NSNumber *n = @(blocksOfType[i]);
             [a addObject:n];
         }
+        
         [a sortUsingComparator:
-              ^NSComparisonResult(id obj1, id obj2){
+              ^NSComparisonResult(id obj1, id obj2) {
                   
                   NSNumber *n1 = (NSNumber*)obj1;
                   NSNumber *n2 = (NSNumber*)obj2;
@@ -80,24 +83,25 @@
     
 }
 
--(void) disconnectWithError: (NSError **) error {
+- (void)disconnectWithError:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     result = Cli_Disconnect(client);
     
-    if (result != 0)
-    {
+    if (result != 0) {
         *error = [[NSError alloc] initWithDomain:Step7TestErrorDomain
                                             code:result
                                         userInfo:NULL];
     }
 }
 
--(NSData*) readInputsStartingAtByte: (int) start withByteLength: (int) length withError: (NSError **) error {
+- (NSData *)readInputsStartingAtByte:(int)start
+                      withByteLength:(int)length
+                           withError:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[0x2000];
-    result = Cli_EBRead(client, start, length, &bytes);
+    result = Cli_EBRead(client, start, length, bytes);
     
     if (result != 0) {
         *error = [[NSError alloc] initWithDomain:Step7TestErrorDomain
@@ -106,15 +110,15 @@
         return nil;
     }
     else {
-
         NSData *d = [[NSData alloc] initWithBytes:&bytes length:length];
-
         return d;
     }
 
 }
 
--(void) writeInputsStartingAtByte:(int)start withData:(NSData *)data withError:(NSError **)error {
+- (void)writeInputsStartingAtByte:(int)start
+                         withData:(NSData *)data
+                        withError:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[[data length]];
@@ -129,7 +133,9 @@
     }
 }
 
--(NSData*) readOutputsStartingAtByte: (int) start withByteLength: (int) length withError: (NSError **) error {
+- (NSData *)readOutputsStartingAtByte:(int)start
+                      withByteLength:(int)length
+                           withError:(NSError * __autoreleasing *) error {
     *error = nil;
     int result;
     byte bytes[0x2000];
@@ -143,13 +149,14 @@
     }
     else {
         NSData *d = [[NSData alloc] initWithBytes:&bytes length:length];
-        
         return d;
     }
     
 }
 
--(void) writeOutputsStartingAtByte:(int)start withData:(NSData *)data withError:(NSError **)error {
+- (void)writeOutputsStartingAtByte:(int)start
+                          withData:(NSData *)data
+                         withError:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[[data length]];
@@ -164,7 +171,9 @@
     }
 }
 
--(NSData*) readMarkersStartingAtByte: (int) start withByteLength: (int) length withError: (NSError **) error {
+- (NSData *)readMarkersStartingAtByte:(int)start
+                       withByteLength:(int)length
+                            withError:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[0x2000];
@@ -178,13 +187,14 @@
     }
     else {
         NSData *d = [[NSData alloc] initWithBytes:&bytes length:length];
-        
         return d;
     }
     
 }
 
--(void) writeMarkersStartingAtByte:(int)start withData:(NSData *)data withError:(NSError **)error {
+- (void)writeMarkersStartingAtByte:(int)start
+                          withData:(NSData *)data
+                         withError:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[[data length]];
@@ -198,7 +208,10 @@
     }
 }
 
--(NSData*) readDataBlock:(int)dataBlockNumber startingAtByte:(int)start withByteLength:(int)length withError:(NSError **)error {
+- (NSData *)readDataBlock:(int)dataBlockNumber
+           startingAtByte:(int)start
+           withByteLength:(int)length
+                withError:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[0x2000];
@@ -212,12 +225,14 @@
     }
     else {
         NSData *d = [[NSData alloc] initWithBytes:&bytes length:length];
-        
         return d;
     }
 }
 
--(void) writeDataBlock:(int)dataBlockNumber startingAtByte:(int)start withData:(NSData *)data withError:(NSError **)error {
+- (void)writeDataBlock:(int)dataBlockNumber
+        startingAtByte:(int)start
+              withData:(NSData *)data
+              withError:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[[data length]];
@@ -232,7 +247,7 @@
     }
 }
 
--(NSDictionary*) listBlockCountsWithError: (NSError **) error {
+- (NSDictionary *)listBlockCountsWithError:(NSError * __autoreleasing *)error {
     *error = nil;
     TS7BlocksList blockList;
     int result = Cli_ListBlocks(client, &blockList);
@@ -256,7 +271,7 @@
     
 }
 
--(NSString*) getPlcModeWithError:(NSError **)error {
+- (NSString *)getPlcModeWithError:(NSError * __autoreleasing *)error {
     *error = nil;
     int status;
     int result = Cli_GetPlcStatus(client, &status);
@@ -277,7 +292,7 @@
     }
 }
 
--(void) hotStartPlcWithError:(NSError **)error {
+- (void)hotStartPlcWithError:(NSError * __autoreleasing *)error {
     int result = Cli_PlcHotStart(client);
     if(result != 0) {
         *error = [[NSError alloc] initWithDomain:Step7TestErrorDomain
@@ -286,7 +301,7 @@
     }
 }
 
--(void) stopPlcWithError:(NSError **)error {
+- (void)stopPlcWithError:(NSError * __autoreleasing *)error {
     int result = Cli_PlcStop(client);
     if(result != 0) {
         *error = [[NSError alloc] initWithDomain:Step7TestErrorDomain
@@ -295,7 +310,7 @@
     }
 }
 
--(NSDictionary*) getPlcInfoWithError:(NSError **)error {
+- (NSDictionary *)getPlcInfoWithError:(NSError * __autoreleasing *)error {
     *error = nil;
     TS7CpuInfo cpuInfo;
     int result = Cli_GetCpuInfo(client, &cpuInfo);
@@ -317,7 +332,7 @@
     }
 }
 
--(NSDictionary*) getPlcOrderCodeWithError:(NSError **)error {
+- (NSDictionary *)getPlcOrderCodeWithError:(NSError * __autoreleasing *)error {
     *error = nil;
     TS7OrderCode orderCode;
     int result = Cli_GetOrderCode(client, &orderCode);
@@ -330,7 +345,10 @@
     }
     else {
         NSMutableDictionary *d = [[NSMutableDictionary alloc] initWithCapacity:5];
-        NSString *v = [[NSString alloc] initWithFormat:@"%d.%d.%d", orderCode.V1, orderCode.V2, orderCode.V3];
+        NSString *v = [[NSString alloc] initWithFormat:@"%d.%d.%d",
+                                                      orderCode.V1,
+                                                      orderCode.V2,
+                                                      orderCode.V3];
         
         [d setObject:@(orderCode.Code)      forKey:@"Order Code"];
         [d setObject:v                      forKey:@"Version"];
@@ -338,11 +356,11 @@
     }
 }
 
--(void)addReadEntry:(S7ReadEntry *)readEntry {
+- (void)addReadEntry:(S7ReadEntry *)readEntry {
     [readEntries addObject:readEntry];
 }
 
--(void)calculateRead {
+- (void)calculateRead {
     [readEntries sortUsingSelector:@selector(compare:)];
     
     const int MAX_CHUNK = 256;
@@ -365,7 +383,8 @@
                 currentIB = [[NSMutableArray alloc] initWithArray:@[@(r.byteNumber), @1]];
             }
             if ((r.byteNumber - (int)currentIB[0]) < MAX_CHUNK) {
-                [currentIB replaceObjectAtIndex:1 withObject:@(r.byteNumber - [currentIB[0] integerValue] + 1)];
+                [currentIB replaceObjectAtIndex:1
+                                     withObject:@(r.byteNumber - [currentIB[0] integerValue] + 1)];
             }
             else {
                 [readPlanObjects addObject:@[@"IB", currentIB[0], currentIB[1]]];
@@ -377,7 +396,8 @@
                 currentQB = [[NSMutableArray alloc] initWithArray:@[@(r.byteNumber), @1]];
             }
             if ((r.byteNumber - (int)currentQB[0]) < MAX_CHUNK) {
-                [currentQB replaceObjectAtIndex:1 withObject:@(r.byteNumber - [currentQB[0] integerValue] + 1)];
+                [currentQB replaceObjectAtIndex:1
+                                     withObject:@(r.byteNumber - [currentQB[0] integerValue] + 1)];
             }
             else {
                 [readPlanObjects addObject:@[@"QB", currentQB[0], currentQB[1]]];
@@ -389,7 +409,8 @@
                 currentMB = [[NSMutableArray alloc] initWithArray:@[@(r.byteNumber), @1]];
             }
             if ((r.byteNumber - (int)currentMB[0]) < MAX_CHUNK) {
-                [currentMB replaceObjectAtIndex:1 withObject:@(r.byteNumber - [currentMB[0] integerValue] + 1)];
+                [currentMB replaceObjectAtIndex:1
+                                     withObject:@(r.byteNumber - [currentMB[0] integerValue] + 1)];
             }
             else {
                 [readPlanObjects addObject:@[@"MB", currentMB[0], currentMB[1]]];
@@ -398,14 +419,19 @@
         }
         if([r.readArea isEqualTo:@"DB"]) {
             if(currentDBB == nil) {
-                currentDBB  = [[NSMutableArray alloc] initWithArray:@[@(r.byteNumber), @(r.dbNumber), @1]];
+                currentDBB  = [[NSMutableArray alloc] initWithArray:@[@(r.byteNumber),
+                                                                      @(r.dbNumber), @1]];
             }
             if (r.dbNumber == [currentDBB[2] integerValue]) {
                 if ((r.byteNumber - (int)currentDBB[0]) < MAX_CHUNK) {
-                    [currentDBB replaceObjectAtIndex:1 withObject:@(r.byteNumber - [currentDBB[0] integerValue] + 1)];
+                    [currentDBB replaceObjectAtIndex:1
+                                          withObject:@(r.byteNumber - [currentDBB[0] integerValue] + 1)];
                 }
                 else {
-                    [readPlanObjects addObject:@[@"DBX", currentDBB[0], currentDBB[1], currentDBB[2]]];
+                    [readPlanObjects addObject:@[@"DBX",
+                                                 currentDBB[0],
+                                                 currentDBB[1],
+                                                 currentDBB[2]]];
                     currentDBB = nil;
                 }
             }
@@ -425,20 +451,29 @@
         [readPlanObjects addObject:@[@"DBX", currentDBB[0], currentDBB[1], currentDBB[2]]];
 }
 
--(void)executeRead {
+- (void)executeRead {
     NSError *e;
     for (int i = 0; i < [readPlanObjects count]; i++) {
         if([readPlanObjects[i][0] isEqual:@"IB"]) {
-            [self readInputsStartingAtByte:(int)[readPlanObjects[i][1] integerValue] withByteLength:(int)[readPlanObjects[i][2] integerValue] withError:&e];
+            [self readInputsStartingAtByte:(int)[readPlanObjects[i][1] integerValue]
+                            withByteLength:(int)[readPlanObjects[i][2] integerValue]
+                                 withError:&e];
         }
         if([readPlanObjects[i][0] isEqual:@"QB"]) {
-            [self readOutputsStartingAtByte:(int)[readPlanObjects[i][1] integerValue] withByteLength:(int)[readPlanObjects[i][2] integerValue] withError:&e];
+            [self readOutputsStartingAtByte:(int)[readPlanObjects[i][1] integerValue]
+                             withByteLength:(int)[readPlanObjects[i][2] integerValue]
+                                  withError:&e];
         }
         if([readPlanObjects[i][0] isEqual:@"MB"]) {
-            [self readMarkersStartingAtByte:(int)[readPlanObjects[i][1] integerValue] withByteLength:(int)[readPlanObjects[i][2] integerValue] withError:&e];
+            [self readMarkersStartingAtByte:(int)[readPlanObjects[i][1] integerValue]
+                             withByteLength:(int)[readPlanObjects[i][2] integerValue]
+                                  withError:&e];
         }
         if([readPlanObjects[i][0] isEqual:@"DBX"]) {
-            [self readDataBlock:(int)[readPlanObjects[i][3] integerValue] startingAtByte:(int)[readPlanObjects[i][1] integerValue] withByteLength:(int)[readPlanObjects[i][2] integerValue] withError:&e];
+            [self readDataBlock:(int)[readPlanObjects[i][3] integerValue]
+                 startingAtByte:(int)[readPlanObjects[i][1] integerValue]
+                 withByteLength:(int)[readPlanObjects[i][2] integerValue]
+                      withError:&e];
         }
     }
 }
