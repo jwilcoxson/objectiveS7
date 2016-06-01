@@ -12,7 +12,6 @@
 {
     S7Object client;
     NSMutableArray *readEntries;
-    NSMutableArray *readPlanSelectors;
     NSMutableArray *readPlanObjects;
 }
 
@@ -20,6 +19,7 @@
     self = [super init];
     if(self) {
         readEntries = [[NSMutableArray alloc] init];
+        readPlanObjects = [[NSMutableArray alloc] init];
         return self;
     }
     else {
@@ -361,12 +361,12 @@
 }
 
 - (void)calculateRead {
+    
     [readEntries sortUsingSelector:@selector(compare:)];
-    
-    const int MAX_CHUNK = 256;
-    
-    readPlanSelectors = [[NSMutableArray alloc] init];
     readPlanObjects = [[NSMutableArray alloc] init];
+    
+    //Maximum number of bytes to read at any point
+    const int MAX_CHUNK = 256;
     
     //Current Operation Plan (byte number, length)
     NSMutableArray *currentIB;
@@ -377,7 +377,9 @@
     NSMutableArray *currentDBB;
     
     for (int i = 0; i < [readEntries count]; i++) {
+        
         S7ReadEntry *r = [readEntries objectAtIndex:i];
+        
         if([r.readArea isEqualTo: @"IB"]) {
             if(currentIB == nil) {
                 currentIB = [[NSMutableArray alloc] initWithArray:@[@(r.byteNumber), @1]];
@@ -391,6 +393,7 @@
                 currentIB = nil;
             }
         }
+        
         if([r.readArea isEqualTo:@"QB"]) {
             if(currentQB == nil) {
                 currentQB = [[NSMutableArray alloc] initWithArray:@[@(r.byteNumber), @1]];
@@ -404,6 +407,7 @@
                 currentQB = nil;
             }
         }
+        
         if([r.readArea isEqualTo:@"MB"]) {
             if(currentMB == nil) {
                 currentMB = [[NSMutableArray alloc] initWithArray:@[@(r.byteNumber), @1]];
@@ -417,6 +421,7 @@
                 currentMB = nil;
             }
         }
+        
         if([r.readArea isEqualTo:@"DB"]) {
             if(currentDBB == nil) {
                 currentDBB  = [[NSMutableArray alloc] initWithArray:@[@(r.byteNumber),
@@ -441,6 +446,7 @@
             }
         }
     }
+    
     if(currentIB != nil)
         [readPlanObjects addObject:@[@"IB", currentIB[0], currentIB[1]]];
     if(currentQB != nil)
@@ -474,6 +480,10 @@
                  startingAtByte:(int)[readPlanObjects[i][1] integerValue]
                  withByteLength:(int)[readPlanObjects[i][2] integerValue]
                       withError:&e];
+        }
+        if (e != nil) {
+            NSLog(@"Read failed");
+            break;
         }
     }
 }
