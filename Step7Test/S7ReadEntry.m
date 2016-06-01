@@ -48,7 +48,7 @@
     }
 }
 
-- (id)initDBReadEntry:(int)dataBlock atByte:(int)byte {
+- (id)initDBReadEntry:(int)dataBlock byte:(int)byte {
     self = [super init];
     if(self) {
         readArea = @"DB";

@@ -14,7 +14,14 @@ int main(int argc, const char * argv[]) {
         S7Handler *s7 = [[S7Handler alloc] init];
         NSError *e;
         
-        [s7 connectTo:@"10.0.0.16" rack:0 slot:2 withError: &e];
+        NSString *ipAddress = @"10.0.0.16";
+        
+        if (![ipAddress isValidIPAddress]) {
+            NSLog(@"Invalid IP address");
+            return 1;
+        }
+        
+        [s7 connectTo:ipAddress rack:0 slot:2 error: &e];
 
         if (e == nil) {
             NSDictionary *d = [s7 listBlockCountsWithError: &e];
@@ -30,7 +37,7 @@ int main(int argc, const char * argv[]) {
                 
                 if ([[d objectForKey:@"OB"] integerValue] > 0) {
                     
-                    a = [s7 listBlocksOfType:Block_OB withError:&e];
+                    a = [s7 listBlocksOfType:Block_OB error:&e];
                     
                     if (a != nil) {
                         for (int i = 0; i < [a count]; i++) {
@@ -45,7 +52,7 @@ int main(int argc, const char * argv[]) {
                 
                 if ([[d objectForKey:@"DB"] integerValue] > 0) {
                 
-                    a = [s7 listBlocksOfType:Block_DB withError:&e];
+                    a = [s7 listBlocksOfType:Block_DB error:&e];
                     
                     if (a != nil) {
                         for (int i = 0; i < [a count]; i++) {
@@ -59,7 +66,7 @@ int main(int argc, const char * argv[]) {
                 
                 if ([[d objectForKey:@"FC"] integerValue] > 0) {
                     
-                    a = [s7 listBlocksOfType:Block_FC withError:&e];
+                    a = [s7 listBlocksOfType:Block_FC error:&e];
                     
                     if (a != nil) {
                         for (int i = 0; i < [a count]; i++) {
@@ -73,7 +80,7 @@ int main(int argc, const char * argv[]) {
                 
                 if ([[d objectForKey:@"FB"] integerValue] > 0) {
                     
-                    a = [s7 listBlocksOfType:Block_FB withError:&e];
+                    a = [s7 listBlocksOfType:Block_FB error:&e];
                     
                     if (a != nil) {
                         for (int i = 0; i < [a count]; i++) {
@@ -87,7 +94,7 @@ int main(int argc, const char * argv[]) {
                 
                 if ([[d objectForKey:@"SFC"] integerValue] > 0) {
                     
-                    a = [s7 listBlocksOfType:Block_SFC withError:&e];
+                    a = [s7 listBlocksOfType:Block_SFC error:&e];
                     
                     if (a != nil) {
                         for (int i = 0; i < [a count]; i++) {
@@ -101,7 +108,7 @@ int main(int argc, const char * argv[]) {
                 
                 if ([[d objectForKey:@"SFB"] integerValue] > 0) {
                     
-                    a = [s7 listBlocksOfType:Block_SFB withError:&e];
+                    a = [s7 listBlocksOfType:Block_SFB error:&e];
                     
                     if (a != nil) {
                         for (int i = 0; i < [a count]; i++) {
@@ -118,7 +125,7 @@ int main(int argc, const char * argv[]) {
                 NSLog(@"Error listing block counts");
             }
             
-            NSData *inputs = [s7 readInputsStartingAtByte:0 withByteLength:10 withError:&e];
+            NSData *inputs = [s7 readInputsStartingAtByte:0 byteLength:10 error:&e];
             
             if (inputs != nil) {
                 NSLog(@"Read inputs successful");
@@ -134,7 +141,7 @@ int main(int argc, const char * argv[]) {
                 NSLog(@"Error reading inputs");
             }
             
-            NSData *outputs = [s7 readOutputsStartingAtByte:0 withByteLength:10 withError:&e];
+            NSData *outputs = [s7 readOutputsStartingAtByte:0 byteLength:10 error:&e];
             
             if (outputs != nil) {
                 NSLog(@"Read outputs successful");

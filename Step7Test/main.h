@@ -12,5 +12,6 @@
 #import <Foundation/Foundation.h>
 #import "S7Handler.h"
 #import "S7Data.h"
+#import "NSString+IPValidation.h"
 
 #endif /* main_h */

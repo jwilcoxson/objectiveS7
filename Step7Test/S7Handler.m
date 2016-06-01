@@ -30,7 +30,7 @@
 - (void)connectTo:(NSString *)ipAddress
              rack:(int)rack
              slot:(int)slot
-        withError:(NSError * __autoreleasing *)error {
+            error:(NSError * __autoreleasing *)error {
     *error = nil;
     client = Cli_Create();
     const char *cIpAddress = [ipAddress cStringUsingEncoding:NSASCIIStringEncoding];
@@ -43,7 +43,7 @@
     }
 }
 
-- (NSArray *)listBlocksOfType:(byte)blockType withError:(NSError * __autoreleasing *)error {
+- (NSArray *)listBlocksOfType:(byte)blockType error:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     TS7BlocksOfType blocksOfType;
@@ -96,8 +96,8 @@
 }
 
 - (NSData *)readInputsStartingAtByte:(int)start
-                      withByteLength:(int)length
-                           withError:(NSError * __autoreleasing *)error {
+                          byteLength:(int)length
+                               error:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[0x2000];
@@ -117,8 +117,8 @@
 }
 
 - (void)writeInputsStartingAtByte:(int)start
-                         withData:(NSData *)data
-                        withError:(NSError * __autoreleasing *)error {
+                             data:(NSData *)data
+                            error:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[[data length]];
@@ -134,8 +134,8 @@
 }
 
 - (NSData *)readOutputsStartingAtByte:(int)start
-                      withByteLength:(int)length
-                           withError:(NSError * __autoreleasing *) error {
+                           byteLength:(int)length
+                                error:(NSError * __autoreleasing *) error {
     *error = nil;
     int result;
     byte bytes[0x2000];
@@ -155,8 +155,8 @@
 }
 
 - (void)writeOutputsStartingAtByte:(int)start
-                          withData:(NSData *)data
-                         withError:(NSError * __autoreleasing *)error {
+                              data:(NSData *)data
+                             error:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[[data length]];
@@ -172,8 +172,8 @@
 }
 
 - (NSData *)readMarkersStartingAtByte:(int)start
-                       withByteLength:(int)length
-                            withError:(NSError * __autoreleasing *)error {
+                           byteLength:(int)length
+                                error:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[0x2000];
@@ -193,8 +193,8 @@
 }
 
 - (void)writeMarkersStartingAtByte:(int)start
-                          withData:(NSData *)data
-                         withError:(NSError * __autoreleasing *)error {
+                              data:(NSData *)data
+                             error:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[[data length]];
@@ -209,9 +209,9 @@
 }
 
 - (NSData *)readDataBlock:(int)dataBlockNumber
-           startingAtByte:(int)start
-           withByteLength:(int)length
-                withError:(NSError * __autoreleasing *)error {
+             startingByte:(int)start
+               byteLength:(int)length
+                    error:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[0x2000];
@@ -230,9 +230,9 @@
 }
 
 - (void)writeDataBlock:(int)dataBlockNumber
-        startingAtByte:(int)start
-              withData:(NSData *)data
-              withError:(NSError * __autoreleasing *)error {
+          startingByte:(int)start
+                  data:(NSData *)data
+                 error:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[[data length]];
@@ -462,24 +462,24 @@
     for (int i = 0; i < [readPlanObjects count]; i++) {
         if([readPlanObjects[i][0] isEqual:@"IB"]) {
             [self readInputsStartingAtByte:(int)[readPlanObjects[i][1] integerValue]
-                            withByteLength:(int)[readPlanObjects[i][2] integerValue]
-                                 withError:&e];
+                                byteLength:(int)[readPlanObjects[i][2] integerValue]
+                                     error:&e];
         }
         if([readPlanObjects[i][0] isEqual:@"QB"]) {
             [self readOutputsStartingAtByte:(int)[readPlanObjects[i][1] integerValue]
-                             withByteLength:(int)[readPlanObjects[i][2] integerValue]
-                                  withError:&e];
+                                 byteLength:(int)[readPlanObjects[i][2] integerValue]
+                                      error:&e];
         }
         if([readPlanObjects[i][0] isEqual:@"MB"]) {
             [self readMarkersStartingAtByte:(int)[readPlanObjects[i][1] integerValue]
-                             withByteLength:(int)[readPlanObjects[i][2] integerValue]
-                                  withError:&e];
+                                 byteLength:(int)[readPlanObjects[i][2] integerValue]
+                                      error:&e];
         }
         if([readPlanObjects[i][0] isEqual:@"DBX"]) {
             [self readDataBlock:(int)[readPlanObjects[i][3] integerValue]
-                 startingAtByte:(int)[readPlanObjects[i][1] integerValue]
-                 withByteLength:(int)[readPlanObjects[i][2] integerValue]
-                      withError:&e];
+                   startingByte:(int)[readPlanObjects[i][1] integerValue]
+                     byteLength:(int)[readPlanObjects[i][2] integerValue]
+                          error:&e];
         }
         if (e != nil) {
             NSLog(@"Read failed");
