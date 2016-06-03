@@ -16,52 +16,62 @@
 
 @interface S7Handler : NSObject
 
+@property BOOL connected;
+
+NS_ASSUME_NONNULL_BEGIN
+
 //Administrative Functions
 - (void)connectTo:(NSString *)ipAddress
              rack:(int)rack
              slot:(int)slot
             error:(NSError * __autoreleasing *)error;
 
--(void)disconnectWithError:(NSError * __autoreleasing *)error;
+- (void)disconnectWithError:(NSError * __autoreleasing *)error;
 
 //Directory Functions
-- (NSArray *)listBlocksOfType:(byte)blockType error:(NSError * __autoreleasing *)error;
-- (NSDictionary *)listBlockCountsWithError:(NSError * __autoreleasing *) error;
+- (NSArray * __nullable)listBlocksOfType:(byte)blockType error:(NSError * __autoreleasing *)error;
+- (NSDictionary * __nullable)listBlockCountsWithError:(NSError * __autoreleasing *)error;
+- (NSDictionary * __nullable)listBlockInformation:(byte)blockType
+                                           number:(int)blockNumber
+                                            error:(NSError * __autoreleasing *)error;
+- (NSData * __nullable)uploadBlock:(byte)blockType
+                            number:(int)blockNumber
+                             error:(NSError * __autoreleasing *)error;
 
 //Data I/O Functions
 
 //Inputs
-- (NSData *)readInputsStartingAtByte:(int)start
-                          byteLength:(int)length
-                               error:(NSError * __autoreleasing *)error;
+- (NSData * __nullable)readInputsStartingAtByte:(int)start
+                                     byteLength:(int)length
+                                          error:(NSError * __autoreleasing *)error;
 
 - (void)writeInputsStartingAtByte:(int)start
                              data:(NSData *)data
                             error:(NSError * __autoreleasing *)error;
 
 //Outputs
-- (NSData *)readOutputsStartingAtByte:(int)start
-                           byteLength:(int)length
-                                error:(NSError * __autoreleasing *)error;
+- (NSData * __nullable)readOutputsStartingAtByte:(int)start
+                                      byteLength:(int)length
+                                           error:(NSError * __autoreleasing *)error;
 
 - (void)writeOutputsStartingAtByte:(int)start
                               data:(NSData *)data
                              error:(NSError * __autoreleasing *)error;
 
 //Markers
-- (NSData *)readMarkersStartingAtByte:(int)start
-                           byteLength:(int)length
-                                error:(NSError * __autoreleasing *)error;
+- (NSData * __nullable)readMarkersStartingAtByte:(int)start
+                                      byteLength:(int)length
+                                           error:(NSError * __autoreleasing *)error;
 
 - (void)writeMarkersStartingAtByte:(int)start
                               data:(NSData *)data
                              error:(NSError * __autoreleasing *)error;
 
 //Data Blocks
-- (NSData *)readDataBlock:(int)dataBlockNumber
-             startingByte:(int)start
-               byteLength:(int)length
-                    error:(NSError * __autoreleasing *)error;
+- (NSData * __nullable)readDataBlock:(int)dataBlockNumber
+                        startingByte:(int)start
+                          byteLength:(int)length
+                               error:(NSError * __autoreleasing *)error;
 
 - (void)writeDataBlock:(int)dataBlockNumber
           startingByte:(int)start
@@ -74,13 +84,15 @@
 - (void)stopPlcWithError:(NSError * __autoreleasing *)error;
 
 //PLC Info Functions
-- (NSDictionary *)getPlcInfoWithError:(NSError * __autoreleasing *)error;
-- (NSDictionary *)getPlcOrderCodeWithError:(NSError * __autoreleasing *)error;
+- (NSDictionary * __nullable)getPlcInfoWithError:(NSError * __autoreleasing *)error;
+- (NSDictionary * __nullable)getPlcOrderCodeWithError:(NSError * __autoreleasing *)error;
 
 //Read Entries
 - (void)addReadEntry:(S7ReadEntry *)readEntry;
 - (void)calculateRead;
 - (void)executeRead;
+
+NS_ASSUME_NONNULL_END
 
 @end
 

@@ -36,14 +36,17 @@
     const char *cIpAddress = [ipAddress cStringUsingEncoding:NSASCIIStringEncoding];
     int result = Cli_ConnectTo(client, cIpAddress, rack, slot);
     
+    self.connected = YES;
+    
     if (result != 0) {
         *error = [[NSError alloc] initWithDomain:Step7TestErrorDomain
                                             code:result
                                         userInfo:NULL];
+        self.connected = NO;
     }
 }
 
-- (NSArray *)listBlocksOfType:(byte)blockType error:(NSError * __autoreleasing *)error {
+- (NSArray * __nullable)listBlocksOfType:(byte)blockType error:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     TS7BlocksOfType blocksOfType;
@@ -93,11 +96,13 @@
                                             code:result
                                         userInfo:NULL];
     }
+    
+    self.connected = NO;
 }
 
-- (NSData *)readInputsStartingAtByte:(int)start
-                          byteLength:(int)length
-                               error:(NSError * __autoreleasing *)error {
+- (NSData * __nullable)readInputsStartingAtByte:(int)start
+                                     byteLength:(int)length
+                                          error:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[0x2000];
@@ -133,9 +138,9 @@
     }
 }
 
-- (NSData *)readOutputsStartingAtByte:(int)start
-                           byteLength:(int)length
-                                error:(NSError * __autoreleasing *) error {
+- (NSData * __nullable)readOutputsStartingAtByte:(int)start
+                                      byteLength:(int)length
+                                           error:(NSError * __autoreleasing *) error {
     *error = nil;
     int result;
     byte bytes[0x2000];
@@ -171,9 +176,9 @@
     }
 }
 
-- (NSData *)readMarkersStartingAtByte:(int)start
-                           byteLength:(int)length
-                                error:(NSError * __autoreleasing *)error {
+- (NSData * __nullable)readMarkersStartingAtByte:(int)start
+                                      byteLength:(int)length
+                                           error:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[0x2000];
@@ -208,10 +213,10 @@
     }
 }
 
-- (NSData *)readDataBlock:(int)dataBlockNumber
-             startingByte:(int)start
-               byteLength:(int)length
-                    error:(NSError * __autoreleasing *)error {
+- (NSData * __nullable)readDataBlock:(int)dataBlockNumber
+                        startingByte:(int)start
+                          byteLength:(int)length
+                               error:(NSError * __autoreleasing *)error {
     *error = nil;
     int result;
     byte bytes[0x2000];
@@ -247,7 +252,7 @@
     }
 }
 
-- (NSDictionary *)listBlockCountsWithError:(NSError * __autoreleasing *)error {
+- (NSDictionary * __nullable)listBlockCountsWithError:(NSError * __autoreleasing *)error {
     *error = nil;
     TS7BlocksList blockList;
     int result = Cli_ListBlocks(client, &blockList);
@@ -266,6 +271,63 @@
         [d setObject:@(blockList.FBCount)   forKey:@"FB"];
         [d setObject:@(blockList.SFCCount)  forKey:@"SFC"];
         [d setObject:@(blockList.SFBCount)  forKey:@"SFB"];
+        return d;
+    }
+    
+}
+
+- (NSDictionary * __nullable)listBlockInformation:(byte)blockType
+                                number:(int)blockNumber
+                                 error:(NSError *__autoreleasing *)error {
+    *error = nil;
+    TS7BlockInfo blockInfo;
+    int result = Cli_GetAgBlockInfo(client, blockType, blockNumber, &blockInfo);
+    
+    if (result != 0) {
+        *error = [[NSError alloc] initWithDomain:Step7TestErrorDomain
+                                            code:result
+                                        userInfo:NULL];
+        return nil;
+    }
+    else {
+        NSMutableDictionary *d = [[NSMutableDictionary alloc] initWithCapacity:15];
+        [d setObject:@(blockInfo.Header)    forKey:@"Header"];
+        [d setObject:@(blockInfo.Author)    forKey:@"Author"];
+        [d setObject:@(blockInfo.BlkType)   forKey:@"Type"];
+        [d setObject:@(blockInfo.BlkNumber) forKey:@"Number"];
+        [d setObject:@(blockInfo.BlkLang)   forKey:@"Language"];
+        [d setObject:@(blockInfo.CodeDate)  forKey:@"Code Date"];
+        [d setObject:@(blockInfo.CheckSum)  forKey:@"Checksum"];
+        [d setObject:@(blockInfo.BlkFlags)  forKey:@"Flags"];
+        [d setObject:@(blockInfo.Family)    forKey:@"Family"];
+        [d setObject:@(blockInfo.IntfDate)  forKey:@"Interface Date"];
+        [d setObject:@(blockInfo.LoadSize)  forKey:@"Load Size"];
+        [d setObject:@(blockInfo.LocalData) forKey:@"Local Data"];
+        [d setObject:@(blockInfo.MC7Size)   forKey:@"MC7 Size"];
+        [d setObject:@(blockInfo.SBBLength) forKey:@"SBB Length"];
+        [d setObject:@(blockInfo.Version)   forKey:@"Version"];
+        
+        return d;
+    }
+}
+
+- (NSData * __nullable)uploadBlock:(byte)blockType
+                            number:(int)blockNumber
+                             error:(NSError *__autoreleasing *)error {
+    *error = nil;
+    byte bytes[0x2000];
+    int length = 0x2000;
+    
+    int result = Cli_FullUpload(client, blockType, blockNumber, &bytes, &length);
+    
+    if (result != 0) {
+        *error = [[NSError alloc] initWithDomain:Step7TestErrorDomain
+                                            code:result
+                                        userInfo:NULL];
+        return nil;
+    }
+    else {
+        NSData *d = [[NSData alloc] initWithBytes:bytes length:length];
         return d;
     }
     
@@ -310,7 +372,7 @@
     }
 }
 
-- (NSDictionary *)getPlcInfoWithError:(NSError * __autoreleasing *)error {
+- (NSDictionary * __nullable)getPlcInfoWithError:(NSError * __autoreleasing *)error {
     *error = nil;
     TS7CpuInfo cpuInfo;
     int result = Cli_GetCpuInfo(client, &cpuInfo);
@@ -332,7 +394,7 @@
     }
 }
 
-- (NSDictionary *)getPlcOrderCodeWithError:(NSError * __autoreleasing *)error {
+- (NSDictionary * __nullable)getPlcOrderCodeWithError:(NSError * __autoreleasing *)error {
     *error = nil;
     TS7OrderCode orderCode;
     int result = Cli_GetOrderCode(client, &orderCode);
