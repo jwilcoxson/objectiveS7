@@ -7,7 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5E0C3D8F1CFF49D20030475F /* NSString+IPValidation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E0C3D8E1CFF49D20030475F /* NSString+IPValidation.m */; };
 		5E9667061CEB6A3A0038B71F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E9667051CEB6A3A0038B71F /* main.m */; };
+		5E96670D1CEB6A960038B71F /* libsnap7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E96670C1CEB6A960038B71F /* libsnap7.dylib */; };
+		5E9CDED81CEBBE4D00540EE7 /* S7Handler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E9667111CEB99910038B71F /* S7Handler.m */; };
+		5E9CDEE11CEBDE6600540EE7 /* snap7.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E9CDEE01CEBDE6600540EE7 /* snap7.m */; };
+		5EB3D3B81CEE286200C5FFDC /* S7Data.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EB3D3B71CEE286200C5FFDC /* S7Data.m */; };
+		5EB3D3BA1CEE370600C5FFDC /* S7Errors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EB3D3B91CEE370600C5FFDC /* S7Errors.m */; };
+		5EB3D3BD1CEF704800C5FFDC /* S7ReadEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EB3D3BC1CEF704800C5FFDC /* S7ReadEntry.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +30,22 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5E0C3D8D1CFF49D20030475F /* NSString+IPValidation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+IPValidation.h"; sourceTree = "<group>"; };
+		5E0C3D8E1CFF49D20030475F /* NSString+IPValidation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+IPValidation.m"; sourceTree = "<group>"; };
 		5E9667021CEB6A3A0038B71F /* Step7Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Step7Test; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E9667051CEB6A3A0038B71F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5E96670C1CEB6A960038B71F /* libsnap7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsnap7.dylib; path = ../../../../../usr/local/lib/libsnap7.dylib; sourceTree = "<group>"; };
+		5E96670F1CEB92670038B71F /* main.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
+		5E9667111CEB99910038B71F /* S7Handler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = S7Handler.m; sourceTree = "<group>"; };
+		5E9667131CEB99A40038B71F /* S7Handler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = S7Handler.h; sourceTree = "<group>"; };
+		5E9CDED71CEBBAE200540EE7 /* snap7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = snap7.h; sourceTree = "<group>"; };
+		5E9CDEE01CEBDE6600540EE7 /* snap7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = snap7.m; sourceTree = "<group>"; };
+		5EB3D3B51CED4A6900C5FFDC /* S7Errors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = S7Errors.h; sourceTree = "<group>"; };
+		5EB3D3B61CEE286200C5FFDC /* S7Data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = S7Data.h; sourceTree = "<group>"; };
+		5EB3D3B71CEE286200C5FFDC /* S7Data.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = S7Data.m; sourceTree = "<group>"; };
+		5EB3D3B91CEE370600C5FFDC /* S7Errors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = S7Errors.m; sourceTree = "<group>"; };
+		5EB3D3BB1CEF704800C5FFDC /* S7ReadEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = S7ReadEntry.h; sourceTree = "<group>"; };
+		5EB3D3BC1CEF704800C5FFDC /* S7ReadEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = S7ReadEntry.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E96670D1CEB6A960038B71F /* libsnap7.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +63,7 @@
 		5E9666F91CEB6A3A0038B71F = {
 			isa = PBXGroup;
 			children = (
+				5E96670C1CEB6A960038B71F /* libsnap7.dylib */,
 				5E9667041CEB6A3A0038B71F /* Step7Test */,
 				5E9667031CEB6A3A0038B71F /* Products */,
 			);
@@ -57,7 +80,20 @@
 		5E9667041CEB6A3A0038B71F /* Step7Test */ = {
 			isa = PBXGroup;
 			children = (
+				5E9CDED71CEBBAE200540EE7 /* snap7.h */,
+				5E9CDEE01CEBDE6600540EE7 /* snap7.m */,
+				5E96670F1CEB92670038B71F /* main.h */,
 				5E9667051CEB6A3A0038B71F /* main.m */,
+				5E9667131CEB99A40038B71F /* S7Handler.h */,
+				5E9667111CEB99910038B71F /* S7Handler.m */,
+				5EB3D3B51CED4A6900C5FFDC /* S7Errors.h */,
+				5EB3D3B91CEE370600C5FFDC /* S7Errors.m */,
+				5EB3D3B61CEE286200C5FFDC /* S7Data.h */,
+				5EB3D3B71CEE286200C5FFDC /* S7Data.m */,
+				5EB3D3BB1CEF704800C5FFDC /* S7ReadEntry.h */,
+				5EB3D3BC1CEF704800C5FFDC /* S7ReadEntry.m */,
+				5E0C3D8D1CFF49D20030475F /* NSString+IPValidation.h */,
+				5E0C3D8E1CFF49D20030475F /* NSString+IPValidation.m */,
 			);
 			path = Step7Test;
 			sourceTree = "<group>";
@@ -118,6 +154,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E9CDEE11CEBDE6600540EE7 /* snap7.m in Sources */,
+				5EB3D3B81CEE286200C5FFDC /* S7Data.m in Sources */,
+				5E0C3D8F1CFF49D20030475F /* NSString+IPValidation.m in Sources */,
+				5E9CDED81CEBBE4D00540EE7 /* S7Handler.m in Sources */,
+				5EB3D3BA1CEE370600C5FFDC /* S7Errors.m in Sources */,
+				5EB3D3BD1CEF704800C5FFDC /* S7ReadEntry.m in Sources */,
 				5E9667061CEB6A3A0038B71F /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -209,14 +251,27 @@
 		5E96670A1CEB6A3A0038B71F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Step7Test/Step7Test-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		5E96670B1CEB6A3A0038B71F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Step7Test/Step7Test-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -239,6 +294,7 @@
 				5E96670B1CEB6A3A0038B71F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
