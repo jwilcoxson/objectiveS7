@@ -16,7 +16,7 @@
 
 - (id)initDBReadEntry:(int)dbNumber byte:(int)byteNumber;
 - (id)initIBReadEntryAtByte:(int)byteNumber;
-- (id)initQBReadyEntryAtByte:(int)byteNumber;
+- (id)initQBReadEntryAtByte:(int)byteNumber;
 - (id)initMBReadEntryAtByte:(int)byteNumber;
 - (NSComparisonResult)compare:(S7ReadEntry *)otherEntry;
 

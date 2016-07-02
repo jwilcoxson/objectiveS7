@@ -89,6 +89,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 //Read Entries
 - (void)addReadEntry:(S7ReadEntry *)readEntry;
+- (void)removeReadEntryAtIndex:(int)index;
+- (int)getReadEntryCount;
+- (void)clearReadEntries;
 - (void)calculateRead;
 - (void)executeRead;
 

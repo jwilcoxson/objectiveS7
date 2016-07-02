@@ -18,7 +18,7 @@
 - (id)init {
     self = [super init];
     if(self) {
-        readEntries = [[NSMutableArray alloc] init];
+        [self clearReadEntries];
         readPlanObjects = [[NSMutableArray alloc] init];
         return self;
     }
@@ -420,6 +420,18 @@
 
 - (void)addReadEntry:(S7ReadEntry *)readEntry {
     [readEntries addObject:readEntry];
+}
+
+- (int)getReadEntryCount {
+    return [[[NSNumber alloc] initWithLong:[readEntries count]] intValue];
+}
+
+- (void)removeReadEntryAtIndex:(int)index {
+    [readEntries removeObjectAtIndex:index];
+}
+
+- (void)clearReadEntries {
+    readEntries = [[NSMutableArray alloc] init];
 }
 
 - (void)calculateRead {

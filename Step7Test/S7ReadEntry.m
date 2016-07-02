@@ -24,7 +24,7 @@
     }
 }
 
-- (id)initQBReadyEntryAtByte:(int)byte {
+- (id)initQBReadEntryAtByte:(int)byte {
     self = [super init];
     if(self) {
         readArea = @"QB";
